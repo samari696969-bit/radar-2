@@ -179,7 +179,13 @@ function detail(){
   var b=s.m?TXT.m[s.m]+" · "+ago(s.tm):"ракеты: нет данных";
   det.textContent="";[a,b].forEach(function(t){var d=document.createElement("div");d.textContent=t;det.appendChild(d)});
 }
-function select(n){var o=sel;sel=n;if(o)paint(o);paint(n);nameEl.textContent=n;detail()}
+function select(n){
+  var o=sel;sel=n;if(o)paint(o);
+  if(n){paint(n);nameEl.textContent=n;detail()}
+  else{nameEl.textContent="Нажмите на регион";det.textContent=""}
+}
+/* клик в пустое место карты снимает выбор */
+document.getElementById("map-wrap").addEventListener("click",function(e){if(!e.target.closest(".t"))select(null)});
 function count(){["d","m"].forEach(function(k){[1,2].forEach(function(v){
   document.getElementById("c_"+k+v).textContent=D.filter(function(x){return S[x.n][k]===v}).length})})}
 async function load(){
@@ -310,3 +316,4 @@ def icon():
            '<circle cx="50" cy="50" r="30" fill="none" stroke="#22c55e" stroke-width="4"/><circle cx="50" cy="50" r="16" fill="none" stroke="#22c55e" stroke-width="3"/>'
            '<path d="M50 50 L76 34" stroke="#f59e0b" stroke-width="5" stroke-linecap="round"/><circle cx="50" cy="50" r="4" fill="#ef4444"/></svg>')
     return Response(svg, media_type="image/svg+xml")
+    
